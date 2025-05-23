@@ -1,12 +1,12 @@
 const request = require('supertest');
-const cliHelper = require('../common/cli.helper');
 const gwHelper = require('../common/gateway.helper');
+const adminHelperFactory = require('../common/admin-helper');
 const idGen = require('uuid62');
 
 const username = idGen.v4();
 const headerName = 'Authorization';
 
-let gatewayPort, adminPort, configDirectoryPath, gatewayProcess, backendServer;
+let gatewayPort, gatewayProcess, backendServer;
 let keyCred;
 
 const proxyPolicy = {
@@ -14,7 +14,9 @@ const proxyPolicy = {
 };
 
 describe('E2E: key-auth Policy', () => {
-  before('setup', () => {
+  let adminHelper, admin;
+  before('setup', async function () {
+    this.timeout(10000);
     const gatewayConfig = {
       apiEndpoints: {
         authorizedEndpoint: {
@@ -36,79 +38,78 @@ describe('E2E: key-auth Policy', () => {
       pipelines: {
         pipeline1: {
           apiEndpoints: ['authorizedEndpoint'],
-          policies: [{
-            'key-auth': {
-              action: {
-                apiKeyHeader: 'TEST_HEADER',
-                apiKeyHeaderScheme: 'SCHEME1'
+          policies: [
+            {
+              'key-auth': {
+                action: {
+                  apiKeyHeader: 'TEST_HEADER',
+                  apiKeyHeaderScheme: 'SCHEME1'
+                }
               }
-            }
-          },
-          proxyPolicy
+            },
+            proxyPolicy
           ]
         },
         pipeline2: {
           apiEndpoints: ['unauthorizedEndpoint'],
-          policies: [{
-            'key-auth': {}
-          },
-          proxyPolicy
+          policies: [
+            {
+              'key-auth': {}
+            },
+            proxyPolicy
           ]
         },
         pipeline_by_query: {
           apiEndpoints: ['onlyQueryParamEndpoint'],
-          policies: [{
-            'key-auth': [{
-              action: {
-                apiKeyField: 'customApiKeyParam',
-                disableHeaders: true
-              }
-            }]
-          },
-          proxyPolicy
+          policies: [
+            {
+              'key-auth': [
+                {
+                  action: {
+                    apiKeyField: 'customApiKeyParam',
+                    disableHeaders: true
+                  }
+                }
+              ]
+            },
+            proxyPolicy
           ]
         }
       }
     };
-    return cliHelper.bootstrapFolder().then(dirInfo => {
-      return gwHelper.startGatewayInstance({ dirInfo, gatewayConfig });
-    }).then(gwInfo => {
-      gatewayProcess = gwInfo.gatewayProcess;
-      backendServer = gwInfo.backendServers[0];
-      gatewayPort = gwInfo.gatewayPort;
-      adminPort = gwInfo.adminPort;
-      configDirectoryPath = gwInfo.dirInfo.configDirectoryPath;
+    const dirInfo = await gwHelper.bootstrapFolder();
+    const gwInfo = await gwHelper.startGatewayInstance({
+      dirInfo,
+      gatewayConfig
+    });
+    gatewayProcess = gwInfo.gatewayProcess;
+    backendServer = gwInfo.backendServers[0];
+    gatewayPort = gwInfo.gatewayPort;
 
-      return cliHelper.runCLICommand({
-        cliArgs: ['scopes create', 'authorizedScope', 'unauthorizedScope'],
-        adminPort,
-        configDirectoryPath
-      });
-    }).then((scopes) => {
-      const args = [
-        '-p', `username=${username}`,
-        '-p', 'firstname=Kate',
-        '-p', 'lastname=Smith'
-      ];
-      return cliHelper.runCLICommand({
-        cliArgs: ['users create'].concat(args),
-        adminPort,
-        configDirectoryPath
-      });
-    }).then(newUser => {
-      return cliHelper.runCLICommand({
-        cliArgs: ['credentials create -t key-auth -p "scopes=authorizedScope" -c', newUser.id],
-        adminPort,
-        configDirectoryPath
-      });
-    }).then(cred => {
-      keyCred = cred;
+    adminHelper = adminHelperFactory();
+    await adminHelper.start({ config: gatewayConfig });
+    admin = adminHelper.admin;
+
+    // Create scopes
+    await admin.scopes.create(['authorizedScope', 'unauthorizedScope']);
+    // Create user
+    const newUser = await admin.users.create({
+      username,
+      firstname: 'Kate',
+      lastname: 'Smith'
+    });
+    // Create credential
+    keyCred = await admin.credentials.create(newUser.id, 'key-auth', {
+      scopes: ['authorizedScope']
     });
   });
 
   after((done) => {
     gatewayProcess.kill();
-    backendServer.close(done);
+    backendServer.close(() => {
+      if (adminHelper) adminHelper.stop();
+      done();
+    });
   });
 
   it('should not authenticate key for requests without authorization header', function () {
@@ -117,7 +118,7 @@ describe('E2E: key-auth Policy', () => {
       .expect(401);
   });
 
-  it('should not authorise key for requests if requester doesn\'t have authorized scopes', function (done) {
+  it("should not authorise key for requests if requester doesn't have authorized scopes", function (done) {
     const apikey = 'apiKey ' + keyCred.keyId + ':' + keyCred.keySecret;
 
     request(`http://localhost:${gatewayPort}`)

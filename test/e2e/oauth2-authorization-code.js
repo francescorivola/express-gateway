@@ -4,7 +4,6 @@ const express = require('express');
 const request = require('superagent');
 const puppeteer = require('puppeteer');
 
-const cliHelper = require('../common/cli.helper');
 const gwHelper = require('../common/gateway.helper');
 
 let tempPath;
@@ -76,7 +75,6 @@ describe('oauth2 authorization code grant type', () => {
     return findOpenPortNumbers(1)
       .then(([port]) => { redirectPort = port; return generateRedirectServer(redirectPort); })
       .then((server) => { redirectServer = server; })
-      .then(cliHelper.bootstrapFolder)
       .then(dirInfo => gwHelper.startGatewayInstance({ dirInfo, gatewayConfig }))
       .then(gwInfo => {
         tempPath = gwInfo.dirInfo.configDirectoryPath;
@@ -193,7 +191,7 @@ describe('oauth2 authorization code grant type', () => {
   });
 
   function createUser(args) {
-    return cliHelper.runCLICommand({
+    return gwHelper.runCLICommand({
       cliArgs: ['users', 'create'].concat(args),
       adminPort,
       configDirectoryPath: tempPath
@@ -201,7 +199,7 @@ describe('oauth2 authorization code grant type', () => {
   }
 
   function createCredential(args) {
-    return cliHelper.runCLICommand({
+    return gwHelper.runCLICommand({
       cliArgs: ['credentials', 'create'].concat(args),
       adminPort,
       configDirectoryPath: tempPath
@@ -209,7 +207,7 @@ describe('oauth2 authorization code grant type', () => {
   }
 
   function createApp(args) {
-    return cliHelper.runCLICommand({
+    return gwHelper.runCLICommand({
       cliArgs: ['apps', 'create'].concat(args),
       adminPort,
       configDirectoryPath: tempPath

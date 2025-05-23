@@ -4,7 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 
-const cliHelper = require('../common/cli.helper');
 const gwHelper = require('../common/gateway.helper');
 
 describe('round-robin load @balancing @proxy', () => {
@@ -13,7 +12,7 @@ describe('round-robin load @balancing @proxy', () => {
   before(function () {
     gatewayConfig = yaml.load(fs.readFileSync(path.resolve('lib/config/gateway.config.yml')));
 
-    return cliHelper.bootstrapFolder()
+    return gwHelper.bootstrapFolder()
       .then(dirInfo => gwHelper.startGatewayInstance({ dirInfo, gatewayConfig, backendServers: 2 }))
       .then(gwInfo => {
         gatewayProcess = gwInfo.gatewayProcess;

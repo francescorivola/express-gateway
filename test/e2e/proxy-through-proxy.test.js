@@ -3,7 +3,6 @@ const http = require('http');
 const assert = require('assert');
 const request = require('superagent');
 const gwHelper = require('../common/gateway.helper');
-const cliHelper = require('../common/cli.helper');
 
 ['HTTP_PROXY', 'http_proxy'].forEach((envVariable) => {
   describe('@e2e @proxy through proxy', () => {
@@ -30,7 +29,7 @@ const cliHelper = require('../common/cli.helper');
     let gw, proxy, srv, bs;
 
     before('init', (done) => {
-      cliHelper.bootstrapFolder().then(dirInfo => {
+      gwHelper.bootstrapFolder().then(dirInfo => {
         proxy = httpProxy.createProxyServer({ changeOrigin: true });
 
         srv = http.createServer(function (req, res) {
