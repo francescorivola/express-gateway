@@ -73,10 +73,17 @@ describe('oauth2 authorization code grant type', () => {
     };
 
     return findOpenPortNumbers(1)
-      .then(([port]) => { redirectPort = port; return generateRedirectServer(redirectPort); })
-      .then((server) => { redirectServer = server; })
-      .then(dirInfo => gwHelper.startGatewayInstance({ dirInfo, gatewayConfig }))
-      .then(gwInfo => {
+      .then(([port]) => {
+        redirectPort = port;
+        return generateRedirectServer(redirectPort);
+      })
+      .then((server) => {
+        redirectServer = server;
+      })
+      .then((dirInfo) =>
+        gwHelper.startGatewayInstance({ dirInfo, gatewayConfig })
+      )
+      .then((gwInfo) => {
         tempPath = gwInfo.dirInfo.configDirectoryPath;
         gatewayProcess = gwInfo.gatewayProcess;
         backendServer = gwInfo.backendServers[0];
@@ -85,47 +92,47 @@ describe('oauth2 authorization code grant type', () => {
       })
       .then(() => {
         const args = [
-          '-p', `username=${username}`,
-          '-p', 'firstname=Kate',
-          '-p', 'lastname=Smith'
+          '-p',
+          `username=${username}`,
+          '-p',
+          'firstname=Kate',
+          '-p',
+          'lastname=Smith'
         ];
 
         return createUser(args);
       })
       .then(() => {
-        const args = [
-          '-c', username,
-          '-t', 'basic-auth'
-        ];
+        const args = ['-c', username, '-t', 'basic-auth'];
 
         return createCredential(args);
       })
-      .then(credentials => {
+      .then((credentials) => {
         password = credentials.password;
 
         const args = [
-          '-u', username,
-          '-p', 'name=apptastic',
-          '-p', `redirectUri=http://localhost:${redirectPort}/cb`
+          '-u',
+          username,
+          '-p',
+          'name=apptastic',
+          '-p',
+          `redirectUri=http://localhost:${redirectPort}/cb`
         ];
 
         return createApp(args);
       })
-      .then(app => {
-        const args = [
-          '-c', app.id,
-          '-t', 'oauth2'
-        ];
+      .then((app) => {
+        const args = ['-c', app.id, '-t', 'oauth2'];
 
         return createCredential(args);
       })
-      .then(credential => {
+      .then((credential) => {
         clientID = credential.id;
         clientSecret = credential.secret;
       });
   });
 
-  after(done => {
+  after((done) => {
     gatewayProcess.kill();
     backendServer.close(() => redirectServer.close(done));
   });
@@ -145,25 +152,33 @@ describe('oauth2 authorization code grant type', () => {
     });
 
     const checkUnauthorized = new Promise((resolve, reject) => {
-      request
-        .get(`http://localhost:${gatewayPort}`)
-        .end((err, res) => {
-          if (!err) reject(new Error('Error should be defined'));
-          should(err).not.be.undefined();
-          should(res.unauthorized).not.be.undefined();
-          should(res.statusCode).be.eql(401);
-          resolve();
-        });
+      request.get(`http://localhost:${gatewayPort}`).end((err, res) => {
+        if (!err) reject(new Error('Error should be defined'));
+        should(err).not.be.undefined();
+        should(res.unauthorized).not.be.undefined();
+        should(res.statusCode).be.eql(401);
+        resolve();
+      });
     });
 
     return checkUnauthorized
       .then(() => puppeteer.launch())
-      .then(browser => Promise.all([browser, browser.pages()]))
-      .then(([browser, [page]]) => Promise.all([browser, page, page.goto(authURL)]))
-      .then(([browser, page]) => Promise.all([browser, page, page.type('[name="username"]', username)]))
-      .then(([browser, page]) => Promise.all([browser, page, page.type('[name="password"]', password)]))
-      .then(([browser, page]) => Promise.all([browser, page, page.click('[type="submit"]')]))
-      .then(([browser, page]) => Promise.all([browser, page, page.click('#allow')]))
+      .then((browser) => Promise.all([browser, browser.pages()]))
+      .then(([browser, [page]]) =>
+        Promise.all([browser, page, page.goto(authURL)])
+      )
+      .then(([browser, page]) =>
+        Promise.all([browser, page, page.type('[name="username"]', username)])
+      )
+      .then(([browser, page]) =>
+        Promise.all([browser, page, page.type('[name="password"]', password)])
+      )
+      .then(([browser, page]) =>
+        Promise.all([browser, page, page.click('[type="submit"]')])
+      )
+      .then(([browser, page]) =>
+        Promise.all([browser, page, page.click('#allow')])
+      )
       .then(([browser, page]) => Promise.all([page.url(), browser.close()]))
       .then(([pageUrl]) => {
         const parsedPageUrl = url.parse(pageUrl, true);
@@ -180,14 +195,14 @@ describe('oauth2 authorization code grant type', () => {
         return request
           .post(`http://localhost:${gatewayPort}/oauth2/token`)
           .send(params)
-          .then(res => res.body.access_token);
+          .then((res) => res.body.access_token);
       })
-      .then(accessToken => {
+      .then((accessToken) => {
         return request
           .get(`http://localhost:${gatewayPort}`)
           .set('Authorization', `Bearer ${accessToken}`);
       })
-      .then(res => should(res.statusCode).be.eql(200));
+      .then((res) => should(res.statusCode).be.eql(200));
   });
 
   function createUser(args) {

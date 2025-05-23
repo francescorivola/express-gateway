@@ -16,11 +16,13 @@ const gwHelper = require('../common/gateway.helper');
       pipelines: {
         pipeline1: {
           apiEndpoints: ['api'],
-          policies: [{
-            proxy: {
-              action: { serviceEndpoint: 'backend' }
+          policies: [
+            {
+              proxy: {
+                action: { serviceEndpoint: 'backend' }
+              }
             }
-          }]
+          ]
         }
       }
     };
@@ -29,7 +31,7 @@ const gwHelper = require('../common/gateway.helper');
     let gw, proxy, srv, bs;
 
     before('init', (done) => {
-      gwHelper.bootstrapFolder().then(dirInfo => {
+      gwHelper.bootstrapFolder().then((dirInfo) => {
         proxy = httpProxy.createProxyServer({ changeOrigin: true });
 
         srv = http.createServer(function (req, res) {
@@ -42,12 +44,17 @@ const gwHelper = require('../common/gateway.helper');
             return done(err);
           }
 
-          process.env[envVariable] = `http://localhost:${server.address().port}`;
-          gwHelper.startGatewayInstance({ dirInfo, gatewayConfig }).then(({ gatewayProcess, backendServers }) => {
-            gw = gatewayProcess;
-            bs = backendServers[0];
-            done();
-          }).catch(done);
+          process.env[envVariable] = `http://localhost:${
+            server.address().port
+          }`;
+          gwHelper
+            .startGatewayInstance({ dirInfo, gatewayConfig })
+            .then(({ gatewayProcess, backendServers }) => {
+              gw = gatewayProcess;
+              bs = backendServers[0];
+              done();
+            })
+            .catch(done);
         });
       });
     });
@@ -65,7 +72,12 @@ const gwHelper = require('../common/gateway.helper');
         .then((res) => {
           assert.ok(res.text);
           // we need to ensure that request went through proxy, not directly
-          assert.ok(proxiedUrls[`${gatewayConfig.serviceEndpoints.backend.urls[0]}/test`], 'Proxy was not called');
+          assert.ok(
+            proxiedUrls[
+              `${gatewayConfig.serviceEndpoints.backend.urls[0]}/test`
+            ],
+            'Proxy was not called'
+          );
         });
     });
   });

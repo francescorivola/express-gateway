@@ -10,11 +10,20 @@ describe('round-robin load @balancing @proxy', () => {
   let gatewayConfig, gatewayProcess, backendServers, gatewayPort;
 
   before(function () {
-    gatewayConfig = yaml.load(fs.readFileSync(path.resolve('lib/config/gateway.config.yml')));
+    gatewayConfig = yaml.load(
+      fs.readFileSync(path.resolve('lib/config/gateway.config.yml'))
+    );
 
-    return gwHelper.bootstrapFolder()
-      .then(dirInfo => gwHelper.startGatewayInstance({ dirInfo, gatewayConfig, backendServers: 2 }))
-      .then(gwInfo => {
+    return gwHelper
+      .bootstrapFolder()
+      .then((dirInfo) =>
+        gwHelper.startGatewayInstance({
+          dirInfo,
+          gatewayConfig,
+          backendServers: 2
+        })
+      )
+      .then((gwInfo) => {
         gatewayProcess = gwInfo.gatewayProcess;
         backendServers = gwInfo.backendServers;
         gatewayPort = gwInfo.gatewayPort;
@@ -26,7 +35,7 @@ describe('round-robin load @balancing @proxy', () => {
     backendServers[0].close(() => backendServers[1].close(done));
   });
 
-  it('proxies with a round-robin balancer', done => {
+  it('proxies with a round-robin balancer', (done) => {
     const messages = [];
 
     request
