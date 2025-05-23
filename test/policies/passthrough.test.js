@@ -1,4 +1,4 @@
-const idGen = require('uuid62');
+const { randomUUID } = require('crypto');
 const request = require('supertest');
 
 const services = require('../../lib/services');
@@ -71,7 +71,7 @@ describe('Functional Tests @auth Policies @passthrough', () => {
     return db.flushdb()
       .then(function () {
         const user1 = {
-          username: idGen.v4(),
+          username: randomUUID(),
           firstname: 't',
           lastname: 't',
           email: 'test@example.com'
