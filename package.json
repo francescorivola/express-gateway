@@ -14,8 +14,7 @@
     "endpoints",
     "policies",
     "pipelines",
-    "nodejs gateway",
-    "oauth2"
+    "nodejs gateway"
   ],
   "contributors": [
     "Roman Lisagor <rlisagor@gmail.com>",
@@ -32,7 +31,6 @@
   },
   "scripts": {
     "start": "node lib/index.js",
-    "start:dev": "cross-env LOG_LEVEL=debug node lib/index.js",
     "lint": "eslint --fix .",
     "test": "mocha test"
   },
@@ -47,7 +45,6 @@
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "express-rate-limit": "^7.5.0",
-    "express-session": "^1.16.2",
     "form-urlencoded": "^4.0.0",
     "http-proxy": "^1.18.0",
     "ioredis": "^4.14.0",
@@ -90,7 +87,6 @@
     "should": "^13.2.3",
     "sinon": "^20.0.0",
     "supertest": "^4.0.2",
-    "supertest-session": "^4.0.0",
     "tmp": "^0.1.0"
   }
 }
