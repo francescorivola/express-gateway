@@ -8,7 +8,7 @@ This file documents all significant changes made to this fork of Express Gateway
 
 - **Removed OAuth2 and Generator Features:**
   - Deleted all code, configuration, and tests related to OAuth2 policies and generators.
-  - Uninstalled and removed dependencies: `oauth2orize`, `passport-oauth2-client-password`, `yeoman-environment`, `yeoman-generator`, `yargs`.
+  - Uninstalled and removed dependencies: `oauth2orize`, `passport-oauth2-client-password`, `yeoman-environment`, `yeoman-generator`, `yargs`, `yawn-yaml`, and devDependency `yeoman-test`.
   - Cleaned up credential models, config templates, and scripts to remove OAuth2 and generator references.
   - Deleted all OAuth2 and generator-related test files.
 - **Removed CLI and Generator Code:**

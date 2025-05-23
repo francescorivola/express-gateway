@@ -31,7 +31,6 @@ Developing cloud native applications, orchestrating and managing them now can be
 - API Consumer and Credentials Management
 - Plugins and Plugin Framework
 - Distributed Data Store
-- CLI
 - REST API
 - Cloud Native Execution
 
@@ -39,16 +38,13 @@ Developing cloud native applications, orchestrating and managing them now can be
 If you have Node.js already installed:
 
 ```bash
-# install Express Gateway
-$ npm install -g express-gateway
+# install Express Gateway (no CLI required)
+$ npm install express-gateway
 ```
 
 #### Creating a Gateway
 
-```bash
-# create a new gateway using the CLI
-$ eg gateway create
-```
+Express Gateway can now be set up and configured entirely via the admin API and configuration files. The CLI and generator are no longer included or required.
 
 #### Get Help
 Need help or have a question?

@@ -85,14 +85,12 @@
     "jsonwebtoken": "^8.5.1",
     "lodash.flatmap": "^4.5.0",
     "minimatch": "^3.0.4",
-    "oauth2orize": "^1.11.0",
     "parent-require": "^1.0.0",
     "passport": "^0.4.0",
     "passport-http": "0.3.0",
     "passport-http-bearer": "1.0.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "1.0.0",
-    "passport-oauth2-client-password": "0.1.2",
     "proxy-agent": "^4.0.1",
     "rate-limit-redis": "^1.6.0",
     "semver": "^6.3.0",
@@ -102,11 +100,7 @@
     "uuid": "^3.3.3",
     "uuid62": "1.0.1",
     "vhost": "3.0.2",
-    "winston": "3.2.1",
-    "yargs": "^14.0.0",
-    "yawn-yaml": "1.4.0",
-    "yeoman-environment": "^2.4.0",
-    "yeoman-generator": "^3.2.0"
+    "winston": "3.2.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.1",
@@ -133,8 +127,7 @@
     "sinon": "^7.4.2",
     "supertest": "^4.0.2",
     "supertest-session": "^4.0.0",
-    "tmp": "^0.1.0",
-    "yeoman-test": "^1.9.1"
+    "tmp": "^0.1.0"
   },
   "yargs": {
     "boolean-negation": false
