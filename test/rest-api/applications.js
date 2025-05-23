@@ -1,7 +1,7 @@
+const { randomUUID } = require('crypto');
 const should = require('should');
-const idGen = require('uuid62');
 const adminHelper = require('../common/admin-helper')();
-const username = idGen.v4();
+const username = randomUUID();
 
 describe('REST: Applications', () => {
   before(() =>

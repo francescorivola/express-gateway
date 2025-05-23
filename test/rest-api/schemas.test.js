@@ -2,7 +2,7 @@ const should = require('should');
 const os = require('os');
 const fs = require('fs');
 const path = require('path');
-const idGen = require('uuid62');
+const { randomUUID } = require('crypto');
 const yaml = require('js-yaml');
 const gateway = require('../../lib/gateway');
 const adminHelper = require('../common/admin-helper')();
@@ -12,7 +12,7 @@ describe('REST: schemas', () => {
   let config;
   beforeEach(() => {
     config = new Config();
-    config.gatewayConfigPath = path.join(os.tmpdir(), idGen.v4() + 'yml');
+    config.gatewayConfigPath = path.join(os.tmpdir(), randomUUID() + 'yml');
   });
 
   afterEach(() => {

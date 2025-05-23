@@ -1,9 +1,9 @@
 const request = require('supertest');
 const gwHelper = require('../common/gateway.helper');
 const adminHelperFactory = require('../common/admin-helper');
-const idGen = require('uuid62');
+const { randomUUID } = require('crypto');
 
-const username = idGen.v4();
+const username = randomUUID();
 const headerName = 'Authorization';
 
 let gatewayPort, gatewayProcess, backendServer;

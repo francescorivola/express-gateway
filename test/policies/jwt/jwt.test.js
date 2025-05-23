@@ -1,4 +1,4 @@
-const idGen = require('uuid62');
+const { randomUUID } = require('crypto');
 const fs = require('fs');
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
@@ -80,7 +80,7 @@ describe('JWT policy', () => {
       before('setup', () => {
         return db.flushdb()
           .then(() => userService.insert({
-            username: idGen.v4(),
+            username: randomUUID(),
             firstname: 'Clark',
             lastname: 'Kent',
             email: 'test@example.com'

@@ -4,14 +4,14 @@ const Config = require('../../lib/config/config');
 const os = require('os');
 const fs = require('fs');
 const path = require('path');
-const idGen = require('uuid62');
 const yaml = require('js-yaml');
+const { randomUUID } = require('crypto');
 
 describe('REST: api endpoints', () => {
   let config;
   beforeEach(() => {
     config = new Config();
-    config.gatewayConfigPath = path.join(os.tmpdir(), idGen.v4() + 'yml');
+    config.gatewayConfigPath = path.join(os.tmpdir(), randomUUID() + 'yml');
   });
 
   afterEach(() => {
@@ -31,7 +31,7 @@ describe('REST: api endpoints', () => {
     it('should create a new api endpoint', () => {
       const testEndpoint = {
         host: 'express-gateway.io',
-        customId: idGen.v4()
+        customId: randomUUID()
       };
       return adminHelper.admin.config.apiEndpoints
         .create('test', testEndpoint)
@@ -60,7 +60,7 @@ describe('REST: api endpoints', () => {
     it('should create a new api endpoint', () => {
       const testEndpoint = {
         host: 'express-gateway.io',
-        customId: idGen.v4() // NOTE: save operation should allow custom props
+        customId: randomUUID() // NOTE: save operation should allow custom props
       };
       return adminHelper.admin.config.apiEndpoints
         .create('test', testEndpoint)
@@ -76,7 +76,7 @@ describe('REST: api endpoints', () => {
     it('should update existing endpoint', () => {
       const testEndpoint = {
         host: 'express-gateway.io',
-        customId: idGen.v4()
+        customId: randomUUID()
       };
       return adminHelper.admin.config.apiEndpoints
         .update('example', testEndpoint)
@@ -105,13 +105,11 @@ describe('REST: api endpoints', () => {
         });
     });
     it('should list all endpoints', () => {
-      return adminHelper.admin.config.apiEndpoints
-        .list()
-        .then((endpoints) => {
-          assert.strictEqual(endpoints.example.host, 'example.com');
-          assert.strictEqual(endpoints.hello.host, 'hello.com');
-          assert.strictEqual(Object.keys(endpoints).length, 2);
-        });
+      return adminHelper.admin.config.apiEndpoints.list().then((endpoints) => {
+        assert.strictEqual(endpoints.example.host, 'example.com');
+        assert.strictEqual(endpoints.hello.host, 'hello.com');
+        assert.strictEqual(Object.keys(endpoints).length, 2);
+      });
     });
   });
 });

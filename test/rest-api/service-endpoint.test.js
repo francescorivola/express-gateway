@@ -4,14 +4,14 @@ const Config = require('../../lib/config/config');
 const os = require('os');
 const fs = require('fs');
 const path = require('path');
-const idGen = require('uuid62');
 const yaml = require('js-yaml');
+const { randomUUID } = require('crypto');
 
 describe('REST: service endpoints', () => {
   let config;
   beforeEach(() => {
     config = new Config();
-    config.gatewayConfigPath = path.join(os.tmpdir(), idGen.v4() + 'yml');
+    config.gatewayConfigPath = path.join(os.tmpdir(), randomUUID + 'yml');
   });
 
   afterEach(() => {
@@ -30,7 +30,7 @@ describe('REST: service endpoints', () => {
     it('should create a new service endpoint', () => {
       const testEndpoint = {
         url: 'https://express-gateway.io',
-        customId: idGen.v4()
+        customId: randomUUID
       };
       return adminHelper.admin.config.serviceEndpoints
         .create('test', testEndpoint)
@@ -59,7 +59,7 @@ describe('REST: service endpoints', () => {
     it('should create a new service endpoint', () => {
       const testEndpoint = {
         url: 'https://express-gateway.io',
-        customId: idGen.v4() // NOTE: save operation should allow custom props
+        customId: randomUUID // NOTE: save operation should allow custom props
       };
       return adminHelper.admin.config.serviceEndpoints
         .create('test', testEndpoint)
@@ -67,22 +67,31 @@ describe('REST: service endpoints', () => {
           const data = fs.readFileSync(config.gatewayConfigPath, 'utf8');
           const cfg = yaml.load(data);
           assert.strictEqual(cfg.serviceEndpoints.test.url, testEndpoint.url);
-          assert.strictEqual(cfg.serviceEndpoints.example.url, 'http://example.com');
-          assert.strictEqual(cfg.serviceEndpoints.hello.url, 'http://hello.com');
+          assert.strictEqual(
+            cfg.serviceEndpoints.example.url,
+            'http://example.com'
+          );
+          assert.strictEqual(
+            cfg.serviceEndpoints.hello.url,
+            'http://hello.com'
+          );
           assert(cfg.serviceEndpoints.test.customId);
         });
     });
     it('should update existing endpoint', () => {
       const testEndpoint = {
         url: 'https://express-gateway.io',
-        customId: idGen.v4()
+        customId: randomUUID
       };
       return adminHelper.admin.config.serviceEndpoints
         .update('example', testEndpoint)
         .then(() => {
           const data = fs.readFileSync(config.gatewayConfigPath, 'utf8');
           const cfg = yaml.load(data);
-          assert.strictEqual(cfg.serviceEndpoints.example.url, testEndpoint.url);
+          assert.strictEqual(
+            cfg.serviceEndpoints.example.url,
+            testEndpoint.url
+          );
           assert(cfg.serviceEndpoints.example.customId);
         });
     });

@@ -4,14 +4,14 @@ const Config = require('../../lib/config/config');
 const os = require('os');
 const fs = require('fs');
 const path = require('path');
-const idGen = require('uuid62');
+const { randomUUID } = require('crypto');
 const yaml = require('js-yaml');
 
 describe('REST: pipelines', () => {
   let config;
   beforeEach(() => {
     config = new Config();
-    config.gatewayConfigPath = path.join(os.tmpdir(), idGen.v4() + 'yml');
+    config.gatewayConfigPath = path.join(os.tmpdir(), randomUUID() + 'yml');
   });
 
   afterEach(() => {
@@ -36,7 +36,7 @@ describe('REST: pipelines', () => {
       const testPipeline = {
         apiEndpoints: ['api'],
         policies: [{ proxy: { action: { serviceEndpoint: 'backend' } } }],
-        customId: idGen.v4() // NOTE: save operation should allow custom props
+        customId: randomUUID() // NOTE: save operation should allow custom props
       };
       return adminHelper.admin.config.pipelines
         .create('test', testPipeline)
@@ -70,7 +70,7 @@ describe('REST: pipelines', () => {
     it('should create a new pipeline', () => {
       const testPipeline = {
         apiEndpoints: ['api'],
-        customId: idGen.v4(), // NOTE: save operation should allow custom props
+        customId: randomUUID(), // NOTE: save operation should allow custom props
         policies: [{ proxy: { action: { serviceEndpoint: 'backend' } } }]
       };
 
@@ -89,7 +89,7 @@ describe('REST: pipelines', () => {
     it('should not create a new pipeline when the general gateway.config is invalid', () => {
       const testPipeline = {
         apiEndpoints: ['api'],
-        customId: idGen.v4(), // NOTE: save operation should allow custom props
+        customId: randomUUID(), // NOTE: save operation should allow custom props
         policies: ['proxy', 'terminate']
       };
       return adminHelper.admin.config.pipelines
@@ -104,7 +104,7 @@ describe('REST: pipelines', () => {
     it('should not create a new pipeline when the a specified policy is invalid', () => {
       const testPipeline = {
         apiEndpoints: ['api'],
-        customId: idGen.v4(), // NOTE: save operation should allow custom props
+        customId: randomUUID(), // NOTE: save operation should allow custom props
         policies: [{ proxy: {} }]
       };
       return adminHelper.admin.config.pipelines
@@ -119,7 +119,7 @@ describe('REST: pipelines', () => {
     it('should not create a new pipeline when the a specified policy has no condition and action', () => {
       const testPipeline = {
         apiEndpoints: ['api'],
-        customId: idGen.v4(), // NOTE: save operation should allow custom props
+        customId: randomUUID(), // NOTE: save operation should allow custom props
         policies: [{ proxy: null }]
       };
       return adminHelper.admin.config.pipelines
@@ -134,7 +134,7 @@ describe('REST: pipelines', () => {
     it('should update existing pipeline', () => {
       const testPipeline = {
         apiEndpoints: ['api'],
-        customId: idGen.v4(), // NOTE: save operation should allow custom props
+        customId: randomUUID(), // NOTE: save operation should allow custom props
         policies: [{ proxy: { action: { serviceEndpoint: 'backend' } } }]
       };
       return adminHelper.admin.config.pipelines
@@ -150,7 +150,7 @@ describe('REST: pipelines', () => {
     it('should refuse a misconfigured policy in a pipeline', () => {
       const testPipeline = {
         apiEndpoints: ['api'],
-        customId: idGen.v4(), // NOTE: save operation should allow custom props
+        customId: randomUUID(), // NOTE: save operation should allow custom props
         policies: [{ jwt: { action: {} } }]
       };
 
