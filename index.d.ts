@@ -27,7 +27,6 @@ declare namespace ExpressGateway {
     registerCondition(condition: Condition): void,
     registerGatewayRoute(gatewayRoutesDeclaration: (gatewayExpressApp: express.Application) => void): void,
     registerAdminRoute(adminRoutesDeclaration: (adminExpressApp: express.Application) => void): void,
-    registerCLIExtension(cliExtension: unknown): void,
     eventBus: EventEmitter
   }
 
