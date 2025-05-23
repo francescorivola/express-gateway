@@ -23,6 +23,15 @@ This file documents all significant changes made to this fork of Express Gateway
   - Updated and cleaned up test teardown logic for reliability.
   - Ensured all remaining tests are CLI/generator-free and maintainable.
 
+### Modernization and Dependency Cleanup
+
+- **UUID Modernization:**
+  - Replaced all usages of `uuid` and `uuid62` with the native Node.js `crypto.randomUUID` function throughout the codebase and tests.
+  - Removed `uuid` and `uuid62` from dependencies and uninstalled them.
+- **Test and Code Consistency:**
+  - Updated all test and service files to use `crypto.randomUUID` for unique ID generation.
+  - Ensured no legacy UUID libraries remain in the project.
+
 ### License and Forking Notes
 
 - This project is a fork of Express Gateway, originally licensed under Apache 2.0.
