@@ -42,7 +42,7 @@ describe('gateway policy with plugins', () => {
         policies: [{
           name: 'test-policy',
           policy: function (actionParams) {
-            return (req, res, next) => {
+            return (req, res) => {
               should(actionParams.p1).be.eql(42);
               res.json({ hello: 'ok', url: req.url, actionParams });
             };
@@ -88,7 +88,7 @@ describe('gateway policy schema with plugins', () => {
             required: ['p1']
           },
           policy: function (actionParams) {
-            return (req, res, next) => {
+            return (req, res) => {
               should(actionParams.p1).be.eql(42);
               res.json({ hello: 'ok', url: req.url, actionParams });
             };

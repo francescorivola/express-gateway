@@ -22,7 +22,7 @@ describe('Credential tests', () => {
     const type = 'oauth2';
 
     it('should not insert a credential that already exists', () => {
-      return insertCredential(type).then(newCredential => {
+      return insertCredential(type).then(() => {
         return should(insertCredential(type)).be.rejected();
       });
     });
@@ -223,7 +223,7 @@ describe('Credential service tests', () => {
     it('should add scopes to existing credential if the scopes are defined', () => {
       return credentialService.insertScopes(['someScope1', 'someScope2', 'someScope3', 'someOtherOne'])
         .then(() => credentialService.addScopesToCredential(username, 'oauth2', ['someScope1', 'someScope2', 'someScope3', 'someOtherOne']))
-        .then((res) => {
+        .then(() => {
           credentialService
             .getCredential(username, 'oauth2')
             .then((cred) => {

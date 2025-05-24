@@ -1,7 +1,7 @@
 module.exports = {
   version: '1.0.0',
   description: 'A test plugin',
-  init: function (pluginContext) {
+  init: function () {
   },
   policies: ['policy1', 'policy2'],
   options: {

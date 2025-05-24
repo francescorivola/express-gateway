@@ -16,7 +16,7 @@ module.exports.setYmlConfig = function ({ ymlConfigPath, newConfig }) {
 };
 
 // Get config by path (gateway.config.yml or system.config.yml)
-module.exports.getYmlConfig = function ({ ymlConfigPath }) {
+module.exports.getYmlConfig = function () {
   const content = fs.readFileSync();
   return yaml.load(content);
 };
@@ -61,8 +61,8 @@ module.exports.startGatewayInstance = function ({ dirInfo, gatewayConfig, backen
         gatewayProcess.stdout.once('data', () => {
           request
             .get(`http://localhost:${gatewayPort}/not-found`)
-            .ok(res => true)
-            .end((err, res) => {
+            .ok(() => true)
+            .end((err) => {
               if (err) {
                 gatewayProcess.kill();
                 reject(err);

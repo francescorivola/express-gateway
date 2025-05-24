@@ -124,7 +124,7 @@ describe('gateway condition schema with plugins', () => {
             },
             required: ['param2']
           },
-          handler: function (req, config) {
+          handler: function () {
             should.fail();
           }
         }]

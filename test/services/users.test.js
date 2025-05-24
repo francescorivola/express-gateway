@@ -307,7 +307,7 @@ describe('User service tests', () => {
           credentialService.insertScopes(['someScope']),
           credentialService.insertCredential(user.id, 'jwt'),
           credentialService.insertCredential(user.id, 'jwt')]
-        ).then(([scope, jwt1, jwt2]) =>
+        ).then(([jwt1, jwt2]) =>
           Promise.all([jwt1, jwt2].map(cred => {
             credentials.push(cred);
             return credentialService.addScopesToCredential(cred.id, 'jwt', ['someScope']);

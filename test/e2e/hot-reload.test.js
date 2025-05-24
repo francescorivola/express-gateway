@@ -32,12 +32,12 @@ describe('hot-reload', () => {
           return done(err);
         }
 
-        cpr(baseConfigDirectory, tempPath, { filter: file => file.includes('.yml') }, (err, files) => {
+        cpr(baseConfigDirectory, tempPath, { filter: file => file.includes('.yml') }, (err) => {
           if (err) {
             return done(err);
           }
 
-          cpr(path.join(__dirname, '../../lib/config/models'), path.join(tempPath, 'models'), (err, files) => {
+          cpr(path.join(__dirname, '../../lib/config/models'), path.join(tempPath, 'models'), (err) => {
             if (err) {
               return done(err);
             }
@@ -113,7 +113,7 @@ describe('hot-reload', () => {
     describe('reloads valid gateway.config.yml', function () {
       it('will respond with a 404 - proxy policy', function (done) {
         this.timeout(TEST_TIMEOUT);
-        watcher.once('change', (evt) => {
+        watcher.once('change', () => {
           setTimeout(() => {
             request
               .get(`http://localhost:${originalGatewayPort}`)
@@ -152,7 +152,7 @@ describe('hot-reload', () => {
     describe('adds the required policies in when required gateway.config.yml', function () {
       it('will respond with a 401 - basic-auth policy', function (done) {
         this.timeout(TEST_TIMEOUT);
-        watcher.once('change', (evt) => {
+        watcher.once('change', () => {
           setTimeout(() => {
             request
               .get(`http://localhost:${originalGatewayPort}`)

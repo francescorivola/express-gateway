@@ -7,7 +7,7 @@ class Provider {
   on () {}
 }
 
-module.exports = function (session) {
+module.exports = function () {
   return Provider;
 };
 

@@ -74,7 +74,7 @@ module.exports = function () {
         testScenario
           .expect(testCase.test.errorCode)
           .expect('Content-Type', /text\/html/)
-          .end((err, res) => { done(err); });
+          .end((err) => { done(err); });
       };
     },
     validateOptions: (testCase) => {
@@ -103,7 +103,7 @@ module.exports = function () {
           }
         }
         testScenario.expect(204)
-          .end((err, res) => { done(err); });
+          .end((err) => { done(err); });
       };
     },
     validateSuccess: (testCase) => {
@@ -124,7 +124,7 @@ module.exports = function () {
               should(res.body.apiEndpoint.scopes).be.deepEqual(testCase.test.scopes);
             }
           })
-          .end((err, res) => { done(err); });
+          .end((err) => { done(err); });
       };
     },
     validateParams: (testCase) => {
@@ -134,7 +134,7 @@ module.exports = function () {
           .expect((res) => {
             should(res.body.params).be.deepEqual(testCase.test.params);
           })
-          .end((err, res) => { done(err); });
+          .end((err) => { done(err); });
       };
     }
   };
