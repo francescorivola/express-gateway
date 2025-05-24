@@ -22,7 +22,7 @@ describe('@log policy', () => {
   it('should log url', () => {
     const next = sinon.spy();
     const logMiddleware = logPolicy({
-      // eslint-disable-next-line no-template-curly-in-string
+       
       message: '${req.url} ${egContext.req.method} ${res.test}'
     });
 
@@ -33,7 +33,7 @@ describe('@log policy', () => {
   it('should log requestID', () => {
     const next = sinon.spy();
     const logMiddleware = logPolicy({
-      // eslint-disable-next-line no-template-curly-in-string
+       
       message: '${requestID}'
     });
 
@@ -44,7 +44,7 @@ describe('@log policy', () => {
   it('should log egContext.requestID', () => {
     const next = sinon.spy();
     const logMiddleware = logPolicy({
-      // eslint-disable-next-line no-template-curly-in-string
+       
       message: '${egContext.requestID}'
     });
 
@@ -55,7 +55,7 @@ describe('@log policy', () => {
   it('should fail to access global context', () => {
     const next = sinon.spy();
     const logMiddleware = logPolicy({
-      // eslint-disable-next-line no-template-curly-in-string
+       
       message: '${process.exit(1)}'
     });
     logMiddleware(req, res, next);

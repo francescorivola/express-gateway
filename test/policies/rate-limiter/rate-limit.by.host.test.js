@@ -25,7 +25,7 @@ describe('rate-limit by host', () => {
               'rate-limit': {
                 action: {
                   max: 1,
-                  // eslint-disable-next-line no-template-curly-in-string
+                   
                   rateLimitBy: '${req.host}'
                 }
               }

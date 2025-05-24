@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+ 
 
 // Modified content.  Original:
 //   https://github.com/yargs/yargs/blob/a6070619b85d8d1662afbb26ca45585dae2620ec/test/helpers/utils.js
