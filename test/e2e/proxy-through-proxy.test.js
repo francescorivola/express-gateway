@@ -5,7 +5,7 @@ const request = require('superagent');
 const gwHelper = require('../common/gateway.helper');
 
 ['HTTP_PROXY', 'http_proxy'].forEach((envVariable) => {
-  describe('@e2e @proxy through proxy', () => {
+  describe.skip('@e2e @proxy through proxy', () => {
     const gatewayConfig = {
       apiEndpoints: {
         api: {

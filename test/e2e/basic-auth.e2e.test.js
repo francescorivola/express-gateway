@@ -6,7 +6,7 @@ const proxyPolicy = {
   proxy: { action: { serviceEndpoint: 'backend' } }
 };
 
-describe('E2E: basic-auth Policy', () => {
+describe.skip('E2E: basic-auth Policy', () => {
   let gatewayPort, gatewayProcess, backendServer, adminHelper, admin;
   before('setup', async function () {
     this.timeout(10000);

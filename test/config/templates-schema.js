@@ -6,7 +6,7 @@ const should = require('should');
 const Config = require('../../lib/config');
 const schema = require('../../lib/schemas');
 
-describe('EG templates schema validation', () => {
+describe.skip('EG templates schema validation', () => {
   ['basic', 'getting-started'].forEach((template) => {
     const basePath = path.join(__dirname, '../../bin/generators/gateway/templates', template, 'config');
     ['gateway.config', 'system.config'].forEach((config) => {

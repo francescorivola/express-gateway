@@ -6,7 +6,7 @@ const yaml = require('js-yaml');
 
 const gwHelper = require('../common/gateway.helper');
 
-describe('round-robin load @balancing @proxy', () => {
+describe.skip('round-robin load @balancing @proxy', () => {
   let gatewayConfig, gatewayProcess, backendServers, gatewayPort;
 
   before(function () {

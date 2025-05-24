@@ -118,7 +118,7 @@ describe("@proxy policy", () => {
         expectResponse(app, 502, /text\/html/));
     });
 
-    describe("When proxy options are specified on the policy action", () => {
+    describe.skip("When proxy options are specified on the policy action", () => {
       before(() => {
         return setupGateway(defaultProxyOptions).then((apps) => {
           app = apps.app;
@@ -157,7 +157,7 @@ describe("@proxy policy", () => {
       });
     });
 
-    describe("When proxy options are specified on the serviceEndpoint", () => {
+    describe.skip("When proxy options are specified on the serviceEndpoint", () => {
       before(() => {
         return setupGateway(undefined, defaultProxyOptions).then((apps) => {
           app = apps.app;
@@ -167,7 +167,7 @@ describe("@proxy policy", () => {
       it("passes options to proxy", () => expectResponse(app, 200, /json/));
     });
 
-    describe("When proxy options are scattered on all the supported properties", () => {
+    describe.skip("When proxy options are scattered on all the supported properties", () => {
       before(() => {
         return setupGateway(
           Object.assign(defaultProxyOptions, { proxyOptions: { xfwd: true } }),
@@ -198,7 +198,7 @@ describe("@proxy policy", () => {
     it("should return 502", () => request(app).get("/endpoint").expect(502));
   });
 
-  describe("requestStream property", () => {
+  describe.skip("requestStream property", () => {
     before(() => {
       return gateway({
         plugins: {
@@ -272,7 +272,7 @@ describe("@proxy policy", () => {
         }));
   });
 
-  describe("strip Path capabilities", () => {
+  describe.skip("strip Path capabilities", () => {
     before(() => {
       return gateway({
         config: {

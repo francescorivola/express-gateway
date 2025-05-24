@@ -11,7 +11,7 @@ describe('REST: service endpoints', () => {
   let config;
   beforeEach(() => {
     config = new Config();
-    config.gatewayConfigPath = path.join(os.tmpdir(), randomUUID + 'yml');
+    config.gatewayConfigPath = path.join(os.tmpdir(), randomUUID() + 'yml');
   });
 
   afterEach(() => {
@@ -30,7 +30,7 @@ describe('REST: service endpoints', () => {
     it('should create a new service endpoint', () => {
       const testEndpoint = {
         url: 'https://express-gateway.io',
-        customId: randomUUID
+        customId: randomUUID()
       };
       return adminHelper.admin.config.serviceEndpoints
         .create('test', testEndpoint)
@@ -59,7 +59,7 @@ describe('REST: service endpoints', () => {
     it('should create a new service endpoint', () => {
       const testEndpoint = {
         url: 'https://express-gateway.io',
-        customId: randomUUID // NOTE: save operation should allow custom props
+        customId: randomUUID() // NOTE: save operation should allow custom props
       };
       return adminHelper.admin.config.serviceEndpoints
         .create('test', testEndpoint)
@@ -81,7 +81,7 @@ describe('REST: service endpoints', () => {
     it('should update existing endpoint', () => {
       const testEndpoint = {
         url: 'https://express-gateway.io',
-        customId: randomUUID
+        customId: randomUUID()
       };
       return adminHelper.admin.config.serviceEndpoints
         .update('example', testEndpoint)

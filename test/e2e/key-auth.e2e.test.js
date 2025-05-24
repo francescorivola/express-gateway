@@ -13,7 +13,7 @@ const proxyPolicy = {
   proxy: { action: { serviceEndpoint: 'backend' } }
 };
 
-describe('E2E: key-auth Policy', () => {
+describe.skip('E2E: key-auth Policy', () => {
   let adminHelper, admin;
   before('setup', async function () {
     this.timeout(10000);

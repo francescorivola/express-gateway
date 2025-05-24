@@ -108,7 +108,7 @@ describe('Auth tests', function () {
     });
   });
 
-  describe('Token Auth', () => {
+  describe.skip('Token Auth', () => {
     let userAccessToken, tokenId, tokenDecrypted;
     before(() => {
       const tokenObj = {

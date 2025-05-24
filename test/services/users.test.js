@@ -307,7 +307,7 @@ describe('User service tests', () => {
           credentialService.insertScopes(['someScope']),
           credentialService.insertCredential(user.id, 'jwt'),
           credentialService.insertCredential(user.id, 'jwt')]
-        ).then(([jwt1, jwt2]) =>
+        ).then(([_, jwt1, jwt2]) => // eslint-disable-line no-unused-vars
           Promise.all([jwt1, jwt2].map(cred => {
             credentials.push(cred);
             return credentialService.addScopesToCredential(cred.id, 'jwt', ['someScope']);

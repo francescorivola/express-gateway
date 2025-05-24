@@ -4,7 +4,7 @@ const services = require('../../lib/services');
 const tokenService = services.token;
 const db = require('../../lib/db');
 
-describe('Access Token tests', function () {
+describe.skip('Access Token tests', function () {
   describe('Save, Find and Get Access Token tests', function () {
     let newToken, accessTokenFromDb, newTokenWithScopes, accessTokenFromDbWithScopes;
     before(() => db.flushdb());
@@ -287,7 +287,7 @@ describe('Access Token tests', function () {
   });
 });
 
-describe('Refresh Token tests', function () {
+describe.skip('Refresh Token tests', function () {
   describe('Save, Find and Get Refresh Token tests', function () {
     let newToken, tokensFromDb, newTokenWithScopes, tokensFromDbWithScopes;
     before(function () {

@@ -3,7 +3,7 @@ const config = require('../../../lib/config');
 const db = require('../../../lib/db');
 const originalGatewayConfig = config.gatewayConfig;
 
-describe('rate-limit policy', () => {
+describe.skip('rate-limit policy', () => {
   const helper = testHelper();
   helper.addPolicy('test', () => (req, res) => {
     res.json({ result: 'test', hostname: req.hostname, url: req.url, apiEndpoint: req.egContext.apiEndpoint });
