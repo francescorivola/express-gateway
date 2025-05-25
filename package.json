@@ -32,7 +32,8 @@
   "scripts": {
     "start": "node lib/index.js",
     "lint": "eslint --fix .",
-    "test": "mocha test"
+    "test": "mocha test",
+    "format": "prettier --check \"**/*.{js,json,md}\""
   },
   "types": "./index.d.ts",
   "dependencies": {
@@ -78,6 +79,7 @@
     "globals": "^16.1.0",
     "jsonwebtoken": "^9.0.2",
     "mocha": "^11.4.0",
+    "prettier": "^3.5.3",
     "rimraf": "^3.0.0",
     "should": "^13.2.3",
     "sinon": "^20.0.0",

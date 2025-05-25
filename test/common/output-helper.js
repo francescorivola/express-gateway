@@ -1,5 +1,3 @@
- 
-
 // Modified content.  Original:
 //   https://github.com/yargs/yargs/blob/a6070619b85d8d1662afbb26ca45585dae2620ec/test/helpers/utils.js
 
@@ -15,27 +13,35 @@ exports.checkOutput = function (f, argv, cb) {
   const _log = console.log;
   const _warn = console.warn;
 
-  process.exit = function () { exit = true; };
-  process.env = Object.assign(process.env, { _: 'node' });
-  process.argv = argv || ['./usage'];
+  process.exit = function () {
+    exit = true;
+  };
+  process.env = Object.assign(process.env, { _: "node" });
+  process.argv = argv || ["./usage"];
 
   const errors = [];
   const logs = [];
   const warnings = [];
 
-  console.error = function (msg) { errors.push(msg); };
-  console.log = function (msg) { logs.push(msg); };
-  console.warn = function (msg) { warnings.push(msg); };
+  console.error = function (msg) {
+    errors.push(msg);
+  };
+  console.log = function (msg) {
+    logs.push(msg);
+  };
+  console.warn = function (msg) {
+    warnings.push(msg);
+  };
 
   let result;
 
-  if (typeof cb === 'function') {
+  if (typeof cb === "function") {
     process.exit = function () {
       exit = true;
       cb(null, done());
     };
     process.emit = function (ev, value) {
-      if (ev === 'uncaughtException') {
+      if (ev === "uncaughtException") {
         done();
         cb(value);
         return true;
@@ -55,7 +61,7 @@ exports.checkOutput = function (f, argv, cb) {
     return done();
   }
 
-  function reset () {
+  function reset() {
     process.exit = _exit;
     process.emit = _emit;
     process.env = _env;
@@ -66,7 +72,7 @@ exports.checkOutput = function (f, argv, cb) {
     console.warn = _warn;
   }
 
-  function done () {
+  function done() {
     reset();
 
     return {
@@ -74,7 +80,7 @@ exports.checkOutput = function (f, argv, cb) {
       logs: logs,
       warnings: warnings,
       exit: exit,
-      result: result
+      result: result,
     };
   }
 };

@@ -1,30 +1,27 @@
 module.exports = function (client) {
-  const baseUrl = '/api-endpoints/';
+  const baseUrl = "/api-endpoints/";
   return {
-    create (name, endpointConfig) {
+    create(name, endpointConfig) {
       return client
         .put(`${baseUrl}${encodeURIComponent(name)}`)
         .send(endpointConfig)
-        .then(res => res.body);
+        .then((res) => res.body);
     },
-    update (name, endpointConfig) {
+    update(name, endpointConfig) {
       return this.create(name, endpointConfig);
     },
-    remove (name) {
+    remove(name) {
       return client
         .del(`${baseUrl}${encodeURIComponent(name)}`)
-        .then(res => res.body);
+        .then((res) => res.body);
     },
-    info (name) {
+    info(name) {
       return client
         .get(`${baseUrl}${encodeURIComponent(name)}`)
-        .then(res => res.body);
+        .then((res) => res.body);
     },
-    list () {
-      return client
-        .get(baseUrl)
-        .then(res => res.body);
-    }
-
+    list() {
+      return client.get(baseUrl).then((res) => res.body);
+    },
   };
 };

@@ -1,44 +1,44 @@
-const request = require('supertest');
-const gwHelper = require('../common/gateway.helper');
-const adminHelperFactory = require('../common/admin-helper');
-const username = 'test';
+const request = require("supertest");
+const gwHelper = require("../common/gateway.helper");
+const adminHelperFactory = require("../common/admin-helper");
+const username = "test";
 const proxyPolicy = {
-  proxy: { action: { serviceEndpoint: 'backend' } }
+  proxy: { action: { serviceEndpoint: "backend" } },
 };
 
-describe.skip('E2E: basic-auth Policy', () => {
+describe.skip("E2E: basic-auth Policy", () => {
   let gatewayPort, gatewayProcess, backendServer, adminHelper, admin;
-  before('setup', async function () {
+  before("setup", async function () {
     this.timeout(10000);
     const gatewayConfig = {
       apiEndpoints: {
         authorizedEndpoint: {
-          host: '*',
-          paths: ['/authorizedPath'],
-          scopes: ['authorizedScope']
+          host: "*",
+          paths: ["/authorizedPath"],
+          scopes: ["authorizedScope"],
         },
         unauthorizedEndpoint: {
-          host: '*',
-          paths: ['/unauthorizedPath'],
-          scopes: ['unauthorizedScope']
-        }
+          host: "*",
+          paths: ["/unauthorizedPath"],
+          scopes: ["unauthorizedScope"],
+        },
       },
-      policies: ['basic-auth', 'proxy'],
+      policies: ["basic-auth", "proxy"],
       pipelines: {
         pipeline1: {
-          apiEndpoint: 'authorizedEndpoint',
-          policies: [{ 'basic-auth': {} }, proxyPolicy]
+          apiEndpoint: "authorizedEndpoint",
+          policies: [{ "basic-auth": {} }, proxyPolicy],
         },
         pipeline2: {
-          apiEndpoint: 'unauthorizedEndpoint',
-          policies: [{ 'basic-auth': {} }, proxyPolicy]
-        }
-      }
+          apiEndpoint: "unauthorizedEndpoint",
+          policies: [{ "basic-auth": {} }, proxyPolicy],
+        },
+      },
     };
     const dirInfo = await gwHelper.bootstrapFolder();
     const gwInfo = await gwHelper.startGatewayInstance({
       dirInfo,
-      gatewayConfig
+      gatewayConfig,
     });
     gatewayProcess = gwInfo.gatewayProcess;
     backendServer = gwInfo.backendServers[0];
@@ -49,17 +49,17 @@ describe.skip('E2E: basic-auth Policy', () => {
     admin = adminHelper.admin;
 
     // Create scopes
-    await admin.scopes.create(['authorizedScope', 'unauthorizedScope']);
+    await admin.scopes.create(["authorizedScope", "unauthorizedScope"]);
     // Create user
     await admin.users.create({
       username,
-      firstname: 'Kate',
-      lastname: 'Smith'
+      firstname: "Kate",
+      lastname: "Smith",
     });
     // Create credential
-    await admin.credentials.create(username, 'basic-auth', {
-      scopes: ['authorizedScope'],
-      password: 'pass'
+    await admin.credentials.create(username, "basic-auth", {
+      scopes: ["authorizedScope"],
+      password: "pass",
     });
   });
 
@@ -71,42 +71,42 @@ describe.skip('E2E: basic-auth Policy', () => {
     });
   });
 
-  it('should not authenticate token for requests without token header', function () {
+  it("should not authenticate token for requests without token header", function () {
     return request(`http://localhost:${gatewayPort}`)
-      .get('/authorizedPath')
+      .get("/authorizedPath")
       .expect(401);
   });
 
   it("should not authenticate token for requests if requester doesn't have authorized scopes", function () {
-    const credentials = Buffer.from(username.concat(':pass')).toString(
-      'base64'
+    const credentials = Buffer.from(username.concat(":pass")).toString(
+      "base64",
     );
 
     return request(`http://localhost:${gatewayPort}`)
-      .get('/unauthorizedPath')
-      .set('Authorization', 'basic ' + credentials)
+      .get("/unauthorizedPath")
+      .set("Authorization", "basic " + credentials)
       .expect(401);
   });
 
-  it('should authenticate token for requests with scopes if requester is authorized', function () {
-    const credentials = Buffer.from(username.concat(':pass')).toString(
-      'base64'
+  it("should authenticate token for requests with scopes if requester is authorized", function () {
+    const credentials = Buffer.from(username.concat(":pass")).toString(
+      "base64",
     );
 
     return request(`http://localhost:${gatewayPort}`)
-      .get('/authorizedPath')
-      .set('Authorization', 'basic ' + credentials)
+      .get("/authorizedPath")
+      .set("Authorization", "basic " + credentials)
       .expect(200);
   });
 
-  it('should not authenticate invalid token', function () {
-    const credentials = Buffer.from(username.concat(':wrongPassword')).toString(
-      'base64'
+  it("should not authenticate invalid token", function () {
+    const credentials = Buffer.from(username.concat(":wrongPassword")).toString(
+      "base64",
     );
 
     return request(`http://localhost:${gatewayPort}`)
-      .get('/authorizedPath')
-      .set('Authorization', 'basic ' + credentials)
+      .get("/authorizedPath")
+      .set("Authorization", "basic " + credentials)
       .expect(401);
   });
 });

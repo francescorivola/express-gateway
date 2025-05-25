@@ -1,45 +1,49 @@
-const assert = require('assert');
-const admin = require('../../lib/rest');
-const eventBus = require('../../lib/eventBus');
-const request = require('supertest');
-describe('admin with plugins', () => {
+const assert = require("assert");
+const admin = require("../../lib/rest");
+const eventBus = require("../../lib/eventBus");
+const request = require("supertest");
+describe("admin with plugins", () => {
   let adminSrv, adminSrvFromEvent;
-  before('fires up a new admin instance', function () {
-    eventBus.on('admin-ready', ({ adminServer }) => {
+  before("fires up a new admin instance", function () {
+    eventBus.on("admin-ready", ({ adminServer }) => {
       adminSrvFromEvent = adminServer;
     });
     return admin({
       plugins: {
-        adminRoutes: [function (adminExpressInstance) {
-          adminExpressInstance.all('/test', (req, res) => res.json({ enabled: true }));
-        }]
+        adminRoutes: [
+          function (adminExpressInstance) {
+            adminExpressInstance.all("/test", (req, res) =>
+              res.json({ enabled: true }),
+            );
+          },
+        ],
       },
       config: {
         gatewayConfig: {
           admin: {
-            port: 0
-          }
-        }
-      }
-    }).then(srv => {
+            port: 0,
+          },
+        },
+      },
+    }).then((srv) => {
       adminSrv = srv;
       return srv;
     });
   });
 
-  it('should add custom route', () => {
+  it("should add custom route", () => {
     return request(adminSrv)
-      .get('/test')
-      .then(res => {
+      .get("/test")
+      .then((res) => {
         assert.ok(res.body.enabled);
       });
   });
-  it('should fire admin-ready event', () => {
+  it("should fire admin-ready event", () => {
     assert.ok(adminSrvFromEvent);
     assert.strictEqual(adminSrvFromEvent, adminSrv);
   });
 
-  after('close admin srv', () => {
+  after("close admin srv", () => {
     adminSrv.close();
   });
 });

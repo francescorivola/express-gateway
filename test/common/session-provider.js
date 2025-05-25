@@ -1,10 +1,9 @@
 let data;
 class Provider {
-  constructor (options) {
+  constructor(options) {
     data = options;
   }
-  ;
-  on () {}
+  on() {}
 }
 
 module.exports = function () {

@@ -1,24 +1,24 @@
-const { fork } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+const { fork } = require("child_process");
+const fs = require("fs");
+const path = require("path");
 
-const should = require('should');
-const chokidar = require('chokidar');
-const cpr = require('cpr');
-const request = require('superagent');
-const rimraf = require('rimraf');
-const tmp = require('tmp');
-const yaml = require('js-yaml');
+const should = require("should");
+const chokidar = require("chokidar");
+const cpr = require("cpr");
+const request = require("superagent");
+const rimraf = require("rimraf");
+const tmp = require("tmp");
+const yaml = require("js-yaml");
 
-const { findOpenPortNumbers } = require('../common/server-helper');
+const { findOpenPortNumbers } = require("../common/server-helper");
 
 const GATEWAY_STARTUP_WAIT_TIME = 5000;
 const TEST_TIMEOUT = 10000;
 
-const baseConfigDirectory = path.join(__dirname, '../../lib/config');
+const baseConfigDirectory = path.join(__dirname, "../../lib/config");
 
-describe('hot-reload', () => {
-  describe('gateway config', () => {
+describe("hot-reload", () => {
+  describe("gateway config", () => {
     let testGatewayConfigPath = null;
     let testGatewayConfigData = null;
     let childProcess = null;
@@ -32,67 +32,90 @@ describe('hot-reload', () => {
           return done(err);
         }
 
-        cpr(baseConfigDirectory, tempPath, { filter: file => file.includes('.yml') }, (err) => {
-          if (err) {
-            return done(err);
-          }
-
-          cpr(path.join(__dirname, '../../lib/config/models'), path.join(tempPath, 'models'), (err) => {
+        cpr(
+          baseConfigDirectory,
+          tempPath,
+          { filter: (file) => file.includes(".yml") },
+          (err) => {
             if (err) {
               return done(err);
             }
 
-            testGatewayConfigPath = path.join(tempPath, 'gateway.config.yml');
-
-            findOpenPortNumbers(2).then(([httpPort, adminPort]) => {
-              fs.readFile(testGatewayConfigPath, (err, configData) => {
+            cpr(
+              path.join(__dirname, "../../lib/config/models"),
+              path.join(tempPath, "models"),
+              (err) => {
                 if (err) {
                   return done(err);
                 }
 
-                testGatewayConfigData = yaml.load(configData);
+                testGatewayConfigPath = path.join(
+                  tempPath,
+                  "gateway.config.yml",
+                );
 
-                testGatewayConfigData.http.port = httpPort;
-                testGatewayConfigData.admin.port = adminPort;
-                testGatewayConfigData.serviceEndpoints.backend.url = `http://localhost:${adminPort}`;
+                findOpenPortNumbers(2)
+                  .then(([httpPort, adminPort]) => {
+                    fs.readFile(testGatewayConfigPath, (err, configData) => {
+                      if (err) {
+                        return done(err);
+                      }
 
-                originalGatewayPort = httpPort;
+                      testGatewayConfigData = yaml.load(configData);
 
-                fs.writeFile(testGatewayConfigPath, yaml.dump(testGatewayConfigData), (err) => {
-                  if (err) {
-                    return done(err);
-                  }
+                      testGatewayConfigData.http.port = httpPort;
+                      testGatewayConfigData.admin.port = adminPort;
+                      testGatewayConfigData.serviceEndpoints.backend.url = `http://localhost:${adminPort}`;
 
-                  const childEnv = Object.assign({}, process.env);
-                  childEnv.EG_CONFIG_DIR = tempPath;
+                      originalGatewayPort = httpPort;
 
-                  // Tests, by default have config watch disabled.
-                  // Need to remove this paramter in the child process.
-                  delete childEnv.EG_DISABLE_CONFIG_WATCH;
+                      fs.writeFile(
+                        testGatewayConfigPath,
+                        yaml.dump(testGatewayConfigData),
+                        (err) => {
+                          if (err) {
+                            return done(err);
+                          }
 
-                  const modulePath = path.join(__dirname, '../..', 'lib', 'index.js');
-                  childProcess = fork(modulePath, [], {
-                    cwd: tempPath,
-                    env: childEnv
-                  });
+                          const childEnv = Object.assign({}, process.env);
+                          childEnv.EG_CONFIG_DIR = tempPath;
 
-                  childProcess.on('error', done);
+                          // Tests, by default have config watch disabled.
+                          // Need to remove this paramter in the child process.
+                          delete childEnv.EG_DISABLE_CONFIG_WATCH;
 
-                  // Not ideal, but we need to make sure the process is running.
-                  setTimeout(() => {
-                    request
-                      .get(`http://localhost:${originalGatewayPort}`)
-                      .end((err, res) => {
-                        should(err).not.be.undefined();
-                        should(res.unauthorized).not.be.undefined();
-                        done();
-                      });
-                  }, GATEWAY_STARTUP_WAIT_TIME);
-                });
-              });
-            }).catch(done);
-          });
-        });
+                          const modulePath = path.join(
+                            __dirname,
+                            "../..",
+                            "lib",
+                            "index.js",
+                          );
+                          childProcess = fork(modulePath, [], {
+                            cwd: tempPath,
+                            env: childEnv,
+                          });
+
+                          childProcess.on("error", done);
+
+                          // Not ideal, but we need to make sure the process is running.
+                          setTimeout(() => {
+                            request
+                              .get(`http://localhost:${originalGatewayPort}`)
+                              .end((err, res) => {
+                                should(err).not.be.undefined();
+                                should(res.unauthorized).not.be.undefined();
+                                done();
+                              });
+                          }, GATEWAY_STARTUP_WAIT_TIME);
+                        },
+                      );
+                    });
+                  })
+                  .catch(done);
+              },
+            );
+          },
+        );
       });
     });
 
@@ -102,18 +125,21 @@ describe('hot-reload', () => {
     });
 
     beforeEach(function (done) {
-      watcher = chokidar.watch(testGatewayConfigPath, { awaitWriteFinish: true, ignoreInitial: true });
-      watcher.on('ready', done);
+      watcher = chokidar.watch(testGatewayConfigPath, {
+        awaitWriteFinish: true,
+        ignoreInitial: true,
+      });
+      watcher.on("ready", done);
     });
 
     afterEach(function () {
       watcher.close();
     });
 
-    describe('reloads valid gateway.config.yml', function () {
-      it('will respond with a 404 - proxy policy', function (done) {
+    describe("reloads valid gateway.config.yml", function () {
+      it("will respond with a 404 - proxy policy", function (done) {
         this.timeout(TEST_TIMEOUT);
-        watcher.once('change', () => {
+        watcher.once("change", () => {
           setTimeout(() => {
             request
               .get(`http://localhost:${originalGatewayPort}`)
@@ -127,14 +153,17 @@ describe('hot-reload', () => {
         });
 
         testGatewayConfigData.pipelines.adminAPI.policies.shift();
-        fs.writeFileSync(testGatewayConfigPath, yaml.dump(testGatewayConfigData));
+        fs.writeFileSync(
+          testGatewayConfigPath,
+          yaml.dump(testGatewayConfigData),
+        );
       });
     });
 
-    describe('uses previous config on reload of invalid gateway.config.yml', function () {
-      it('will respond with 404 - empty proxy', function (done) {
+    describe("uses previous config on reload of invalid gateway.config.yml", function () {
+      it("will respond with 404 - empty proxy", function (done) {
         this.timeout(TEST_TIMEOUT);
-        watcher.once('change', () => {
+        watcher.once("change", () => {
           request
             .get(`http://localhost:${originalGatewayPort}`)
             .end((err, res) => {
@@ -145,14 +174,14 @@ describe('hot-reload', () => {
             });
         });
 
-        fs.writeFileSync(testGatewayConfigPath, '{er:t4');
+        fs.writeFileSync(testGatewayConfigPath, "{er:t4");
       });
     });
 
-    describe('adds the required policies in when required gateway.config.yml', function () {
-      it('will respond with a 401 - basic-auth policy', function (done) {
+    describe("adds the required policies in when required gateway.config.yml", function () {
+      it("will respond with a 401 - basic-auth policy", function (done) {
         this.timeout(TEST_TIMEOUT);
-        watcher.once('change', () => {
+        watcher.once("change", () => {
           setTimeout(() => {
             request
               .get(`http://localhost:${originalGatewayPort}`)
@@ -165,9 +194,14 @@ describe('hot-reload', () => {
           }, GATEWAY_STARTUP_WAIT_TIME);
         });
 
-        testGatewayConfigData.policies.push('basic-auth');
-        testGatewayConfigData.pipelines.adminAPI.policies.unshift({ 'basic-auth': {} });
-        fs.writeFileSync(testGatewayConfigPath, yaml.dump(testGatewayConfigData));
+        testGatewayConfigData.policies.push("basic-auth");
+        testGatewayConfigData.pipelines.adminAPI.policies.unshift({
+          "basic-auth": {},
+        });
+        fs.writeFileSync(
+          testGatewayConfigPath,
+          yaml.dump(testGatewayConfigData),
+        );
       });
     });
   });

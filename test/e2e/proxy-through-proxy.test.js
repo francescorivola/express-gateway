@@ -1,36 +1,36 @@
-const httpProxy = require('http-proxy');
-const http = require('http');
-const assert = require('assert');
-const request = require('superagent');
-const gwHelper = require('../common/gateway.helper');
+const httpProxy = require("http-proxy");
+const http = require("http");
+const assert = require("assert");
+const request = require("superagent");
+const gwHelper = require("../common/gateway.helper");
 
-['HTTP_PROXY', 'http_proxy'].forEach((envVariable) => {
-  describe.skip('@e2e @proxy through proxy', () => {
+["HTTP_PROXY", "http_proxy"].forEach((envVariable) => {
+  describe.skip("@e2e @proxy through proxy", () => {
     const gatewayConfig = {
       apiEndpoints: {
         api: {
-          path: '/test'
-        }
+          path: "/test",
+        },
       },
-      policies: ['proxy'],
+      policies: ["proxy"],
       pipelines: {
         pipeline1: {
-          apiEndpoints: ['api'],
+          apiEndpoints: ["api"],
           policies: [
             {
               proxy: {
-                action: { serviceEndpoint: 'backend' }
-              }
-            }
-          ]
-        }
-      }
+                action: { serviceEndpoint: "backend" },
+              },
+            },
+          ],
+        },
+      },
     };
 
     const proxiedUrls = {};
     let gw, proxy, srv, bs;
 
-    before('init', (done) => {
+    before("init", (done) => {
       gwHelper.bootstrapFolder().then((dirInfo) => {
         proxy = httpProxy.createProxyServer({ changeOrigin: true });
 
@@ -59,7 +59,7 @@ const gwHelper = require('../common/gateway.helper');
       });
     });
 
-    after('cleanup', (done) => {
+    after("cleanup", (done) => {
       delete process.env[envVariable];
       gw.kill();
       proxy.close();
@@ -76,7 +76,7 @@ const gwHelper = require('../common/gateway.helper');
             proxiedUrls[
               `${gatewayConfig.serviceEndpoints.backend.urls[0]}/test`
             ],
-            'Proxy was not called'
+            "Proxy was not called",
           );
         });
     });

@@ -40,7 +40,7 @@ describe("Auth tests", function () {
         return credentialService.insertCredential(
           userFromDb.id,
           "oauth2",
-          _credential
+          _credential,
         );
       })
       .then((res) => should.exist(res));
@@ -58,7 +58,7 @@ describe("Auth tests", function () {
               username: user.username,
               isActive: true,
             },
-            userFromDb
+            userFromDb,
           );
           should.exist(authResponse);
           should.deepEqual(authResponse, expectedResponse);
@@ -118,7 +118,7 @@ describe("Auth tests", function () {
           authService.authorizeCredential(userFromDb.id, "oauth2", [
             "otherScope",
             "someScope2",
-          ])
+          ]),
         )
         .then((authResponse) => {
           should.exist(authResponse);

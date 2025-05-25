@@ -1,17 +1,17 @@
-const should = require('should');
-const request = require('superagent');
-const fs = require('fs');
-const path = require('path');
-const yaml = require('js-yaml');
+const should = require("should");
+const request = require("superagent");
+const fs = require("fs");
+const path = require("path");
+const yaml = require("js-yaml");
 
-const gwHelper = require('../common/gateway.helper');
+const gwHelper = require("../common/gateway.helper");
 
-describe.skip('round-robin load @balancing @proxy', () => {
+describe.skip("round-robin load @balancing @proxy", () => {
   let gatewayConfig, gatewayProcess, backendServers, gatewayPort;
 
   before(function () {
     gatewayConfig = yaml.load(
-      fs.readFileSync(path.resolve('lib/config/gateway.config.yml'))
+      fs.readFileSync(path.resolve("lib/config/gateway.config.yml")),
     );
 
     return gwHelper
@@ -20,8 +20,8 @@ describe.skip('round-robin load @balancing @proxy', () => {
         gwHelper.startGatewayInstance({
           dirInfo,
           gatewayConfig,
-          backendServers: 2
-        })
+          backendServers: 2,
+        }),
       )
       .then((gwInfo) => {
         gatewayProcess = gwInfo.gatewayProcess;
@@ -35,7 +35,7 @@ describe.skip('round-robin load @balancing @proxy', () => {
     backendServers[0].close(() => backendServers[1].close(done));
   });
 
-  it('proxies with a round-robin balancer', (done) => {
+  it("proxies with a round-robin balancer", (done) => {
     const messages = [];
 
     request

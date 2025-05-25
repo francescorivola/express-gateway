@@ -1,24 +1,24 @@
-const rest = require('../../lib/rest');
-const adminClient = require('../../admin');
+const rest = require("../../lib/rest");
+const adminClient = require("../../admin");
 module.exports = function () {
   return {
-    start ({ config } = {}) {
+    start({ config } = {}) {
       return rest({ config }).then((srv) => {
         this.adminSrv = srv;
         const srvInfo = srv.address();
         this.admin = adminClient({
-          baseUrl: `http://${srvInfo.address}:${srvInfo.port}`
+          baseUrl: `http://${srvInfo.address}:${srvInfo.port}`,
         });
         return this.adminSrv;
       });
     },
-    stop () {
+    stop() {
       this.adminSrv && this.adminSrv.close();
       return this.reset();
     },
-    reset () {
-      const db = require('../../lib/db');
+    reset() {
+      const db = require("../../lib/db");
       return db.flushdb();
-    }
+    },
   };
 };

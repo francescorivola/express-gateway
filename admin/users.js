@@ -1,38 +1,38 @@
 module.exports = function (client) {
-  const baseUrl = '/users/';
+  const baseUrl = "/users/";
   return {
-    create (user) {
+    create(user) {
       return client
         .post(baseUrl)
         .send(user)
-        .then(res => res.body);
+        .then((res) => res.body);
     },
-    update (id, user) {
+    update(id, user) {
       return client
         .put(`${baseUrl}${encodeURIComponent(id)}`)
         .send(user)
-        .then(res => res.body);
+        .then((res) => res.body);
     },
-    activate (id) {
+    activate(id) {
       return client
         .put(`${baseUrl}${encodeURIComponent(id)}/status`)
         .send({ status: true })
-        .then(res => res.body);
+        .then((res) => res.body);
     },
 
-    deactivate (id) {
+    deactivate(id) {
       return client
         .put(`${baseUrl}${encodeURIComponent(id)}/status`)
         .send({ status: false })
-        .then(res => res.body);
+        .then((res) => res.body);
     },
 
-    info (id) {
+    info(id) {
       return client
         .get(`${baseUrl}${encodeURIComponent(id)}`)
-        .then(res => res.body);
+        .then((res) => res.body);
     },
-    list (params = {}) {
+    list(params = {}) {
       let results = [];
 
       const fetchNext = (res) => {
@@ -46,17 +46,13 @@ module.exports = function (client) {
         return { users: results, nextKey: res.body.nextKey };
       };
 
-      return client
-        .get(baseUrl)
-        .query(params)
-        .then(fetchNext);
+      return client.get(baseUrl).query(params).then(fetchNext);
     },
 
-    remove (id) {
+    remove(id) {
       return client
         .del(`${baseUrl}${encodeURIComponent(id)}`)
-        .then(res => res.body);
-    }
-
+        .then((res) => res.body);
+    },
   };
 };
