@@ -20,9 +20,3 @@ session:
   secret: keyboard cat
   resave: false
   saveUninitialized: false
-accessTokens:
-  timeToExpiry: 7200000
-refreshTokens:
-  timeToExpiry: 7200000
-authorizationCodes:
-  timeToExpiry: 300000

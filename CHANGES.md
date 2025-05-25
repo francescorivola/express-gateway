@@ -2,6 +2,16 @@
 
 This file documents all significant changes made to this fork of Express Gateway, starting May 2025.
 
+## 2025-05-25
+
+### Token-based Authentication and Management Removed
+
+- **Removed all token-based features:**
+  - Deleted AuthToken/RefreshToken logic, token service, token DAO, token admin APIs, and all related REST routes.
+  - Removed all token-related tests and code references throughout the codebase.
+  - Cleaned up configuration and schema files to remove accessTokens and refreshTokens sections.
+  - Ensured no remaining code or config references to token/refreshToken features.
+
 ## 2025-05-23
 
 ### Major Removals and Refactoring

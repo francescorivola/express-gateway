@@ -63,7 +63,6 @@ describe('Credential tests', () => {
   });
 
   const tests = [
-    { type: 'oauth2', passwordKey: 'secret' },
     { type: 'basic-auth', passwordKey: 'password' },
     { type: 'key-auth' },
     { type: 'jwt' }
