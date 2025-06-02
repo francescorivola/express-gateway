@@ -55,6 +55,8 @@
     "json-schema-ref-parser": "^7.1.1",
     "lodash.flatmap": "^4.5.0",
     "minimatch": "^3.0.4",
+    "nanoid": "^5.1.5",
+    "nanoid-dictionary": "^5.0.0",
     "parent-require": "^1.0.0",
     "passport": "^0.7.0",
     "passport-http": "0.3.0",
