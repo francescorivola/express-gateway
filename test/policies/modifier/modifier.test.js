@@ -33,7 +33,7 @@ describe("@modifier policy", () => {
 
           res.setHeader("x-test", "hello");
           res.status(200).json(Object.assign({ url: req.url }, req.body));
-        }
+        },
       );
 
       backendServer = expressApp.listen(backendServerPort, (error) => {
