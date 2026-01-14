@@ -65,7 +65,7 @@
     "rate-limit-redis": "^4.2.0",
     "redis": "^5.1.0",
     "semver": "^6.3.0",
-    "superagent": "^10.2.1",
+    "superagent": "^10.3.0",
     "superagent-logger": "^1.1.0",
     "superagent-prefix": "^0.0.2",
     "vhost": "3.0.2",
