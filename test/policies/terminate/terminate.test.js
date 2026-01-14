@@ -44,6 +44,6 @@ describe("@terminate", () => {
         result: "test",
         errorCode: 429,
       },
-    })
+    }),
   );
 });

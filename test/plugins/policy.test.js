@@ -70,7 +70,7 @@ describe("gateway policy with plugins", () => {
       test: {
         url: "/",
       },
-    })
+    }),
   );
 });
 
@@ -137,7 +137,7 @@ describe("gateway policy schema with plugins", () => {
           ],
         },
         config,
-      })
+      }),
     ).rejected();
   });
 });
