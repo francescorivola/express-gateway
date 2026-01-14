@@ -33,7 +33,7 @@ describe("@modifier policy", () => {
 
           res.setHeader("x-test", "hello");
           res.status(200).json(Object.assign({ url: req.url }, req.body));
-        },
+        }
       );
 
       backendServer = expressApp.listen(backendServerPort, done);
@@ -53,6 +53,7 @@ describe("@modifier policy", () => {
         .type("json")
         .send({})
         .expect((res) => {
+          should(res.status).be.equal(200);
           should(res.body).not.have.property("url");
           should(res.header).not.have.property("x-test");
 
@@ -68,6 +69,7 @@ describe("@modifier policy", () => {
         .type("form")
         .send({ hello: "world" })
         .expect((res) => {
+          should(res.status).be.equal(200);
           should(res.body).not.have.property("url");
           should(res.header).not.have.property("x-test");
 
