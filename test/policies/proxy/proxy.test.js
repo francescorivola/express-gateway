@@ -62,7 +62,7 @@ describe("@proxy policy", () => {
 
       backendServerPort = ports[0];
 
-      expressApp.all("*", express.json(), function (req, res) {
+      expressApp.all("*splat", express.json(), function (req, res) {
         if (req.headers["x-test"]) {
           res.setHeader("x-test", req.header("x-test"));
         }

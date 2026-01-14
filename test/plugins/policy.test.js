@@ -11,7 +11,7 @@ config.gatewayConfig = {
   apiEndpoints: {
     test_default: {
       host: "*",
-      paths: ["/*splat"],
+      paths: ["/{*splat}"],
     },
   },
   policies: ["test-policy"],
@@ -70,7 +70,7 @@ describe("gateway policy with plugins", () => {
       test: {
         url: "/",
       },
-    }),
+    })
   );
 });
 
@@ -137,7 +137,7 @@ describe("gateway policy schema with plugins", () => {
           ],
         },
         config,
-      }),
+      })
     ).rejected();
   });
 });

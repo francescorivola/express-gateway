@@ -8,7 +8,7 @@ describe("@terminate", () => {
     const configTemplate = {
       http: { port: 0 },
       apiEndpoints: {
-        test: { paths: "*" },
+        test: { paths: "*splat" },
       },
       policies: ["terminate"],
       pipelines: {
@@ -44,6 +44,6 @@ describe("@terminate", () => {
         result: "test",
         errorCode: 429,
       },
-    }),
+    })
   );
 });

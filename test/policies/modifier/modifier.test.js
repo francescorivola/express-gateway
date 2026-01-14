@@ -19,7 +19,7 @@ describe("@modifier policy", () => {
       backendServerPort = ports[0];
 
       expressApp.all(
-        "*",
+        "/{*splat}",
         express.json(),
         express.urlencoded({ extended: true }),
         function (req, res) {
