@@ -21,7 +21,7 @@ describe("@modifier policy", () => {
       expressApp.all(
         "*",
         express.json(),
-        express.urlencoded(),
+        express.urlencoded({ extended: true }),
         function (req, res) {
           if (req.header("r-test")) {
             res.setHeader("r-test", req.header("r-test"));
@@ -33,10 +33,12 @@ describe("@modifier policy", () => {
 
           res.setHeader("x-test", "hello");
           res.status(200).json(Object.assign({ url: req.url }, req.body));
-        },
+        }
       );
 
-      backendServer = expressApp.listen(backendServerPort, done);
+      backendServer = expressApp.listen(backendServerPort, (error) => {
+        done(error);
+      });
     });
   });
 
