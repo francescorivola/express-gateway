@@ -2,6 +2,15 @@
 
 This file documents all significant changes made to this fork of Express Gateway, starting May 2025.
 
+## 2026-01-14
+
+### Express v5 Support
+
+- **Updated to Express v5:**
+  - Upgraded Express.js dependency from v4 to v5.2.1.
+  - Updated all code to be compatible with Express v5 breaking changes and new features.
+  - Tested and validated all middleware, policies, and gateway functionality with Express v5.
+
 ## 2025-05-25
 
 ### Token-based Authentication and Management Removed

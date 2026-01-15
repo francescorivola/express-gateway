@@ -4,12 +4,15 @@ const express = require("express");
 const generateBackendServer = (port) => {
   const app = express();
 
-  app.all("*", (req, res) => {
+  app.all("/{*splat}", (req, res) => {
     const port = req.connection.server.address().port;
     res.send("Hello from port " + port);
   });
-  return new Promise((resolve) => {
-    const runningApp = app.listen(port || 0, () => {
+  return new Promise((resolve, reject) => {
+    const runningApp = app.listen(port || 0, (error) => {
+      if (error) {
+        return reject(error);
+      }
       resolve({
         app: runningApp,
         port: runningApp.address().port,

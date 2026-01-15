@@ -8,6 +8,8 @@ This project is a community-maintained fork of the original [Express Gateway](ht
 
 Express Gateway is a microservices API gateway built on top of Express.js and Express middleware. It secures your microservices and serverless functions and exposes them through APIs using Node.js, Express, and Express middleware.
 
+**This fork now supports Express v5**, taking advantage of the latest features and improvements in the Express framework.
+
 This fork removes unused features such as OAuth2, CLI, generators, plugin installer, and all token-based authentication and management features (including AuthToken/RefreshToken logic, token service, token admin APIs, and related tests). All configuration and management is now done via the admin API and configuration files.
 
 ## License

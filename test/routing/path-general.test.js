@@ -97,7 +97,7 @@ describe("path resolution for specific and general domains", () => {
 
       before("setup", () => {
         config.gatewayConfig = configTemplate;
-        config.gatewayConfig.apiEndpoints.test.paths = "/admin/*";
+        config.gatewayConfig.apiEndpoints.test.paths = "/admin/{*splat}";
         return helper.setup({ config, plugins });
       });
 
@@ -266,7 +266,7 @@ describe("path resolution for specific and general domains", () => {
       });
     });
 
-    describe('paths configuration with wildcard after slash or directory ["/admin","/admin/*"]', () => {
+    describe('paths configuration with wildcard after slash or directory ["/admin","/admin/{*splat}"]', () => {
       const helper = testHelper();
       const plugins = {
         policies: [
@@ -286,7 +286,10 @@ describe("path resolution for specific and general domains", () => {
 
       before("setup", () => {
         config.gatewayConfig = configTemplate;
-        config.gatewayConfig.apiEndpoints.test.paths = ["/admin", "/admin/*"];
+        config.gatewayConfig.apiEndpoints.test.paths = [
+          "/admin",
+          "/admin/{*splat}",
+        ];
         return helper.setup({ config, plugins });
       });
 
