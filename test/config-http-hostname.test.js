@@ -63,5 +63,10 @@ describe("hostname", () => {
     return supertest(`http://${address}:10441`).get("/").expect(200);
   });
 
-  after(() => helper.cleanup());
+  after(() => {
+    if (process.env.CI) {
+      return;
+    }
+    helper.cleanup();
+  });
 });
