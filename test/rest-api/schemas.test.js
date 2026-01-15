@@ -47,10 +47,10 @@ describe("REST: schemas", () => {
         .list("policy")
         .then((schemasResult) => {
           const found = schemasResult.find((schemaResult) =>
-            schemaResult.schema.$id.includes("basic-auth")
+            schemaResult.schema.$id.includes("basic-auth"),
           );
           const other = schemasResult.filter(
-            (schemaResult) => schemaResult.type !== "policy"
+            (schemaResult) => schemaResult.type !== "policy",
           );
           should(found.schema).not.be.undefined();
           should(found.schema.$id).containEql("basic-auth");

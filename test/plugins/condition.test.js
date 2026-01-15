@@ -145,7 +145,7 @@ describe("gateway condition schema with plugins", () => {
       const req = Object.create(express.request);
       req.url = "/test";
       should.throws(() =>
-        conditions["test-condition-2"]({ param1: true })(req)
+        conditions["test-condition-2"]({ param1: true })(req),
       );
     });
   });

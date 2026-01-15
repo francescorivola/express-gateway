@@ -51,7 +51,7 @@ describe.skip("hot-reload", () => {
 
                 testGatewayConfigPath = path.join(
                   tempPath,
-                  "gateway.config.yml"
+                  "gateway.config.yml",
                 );
 
                 findOpenPortNumbers(2)
@@ -88,7 +88,7 @@ describe.skip("hot-reload", () => {
                             __dirname,
                             "../..",
                             "lib",
-                            "index.js"
+                            "index.js",
                           );
                           childProcess = fork(modulePath, [], {
                             cwd: tempPath,
@@ -107,14 +107,14 @@ describe.skip("hot-reload", () => {
                                 done();
                               });
                           }, GATEWAY_STARTUP_WAIT_TIME);
-                        }
+                        },
                       );
                     });
                   })
                   .catch(done);
-              }
+              },
             );
-          }
+          },
         );
       });
     });
@@ -155,7 +155,7 @@ describe.skip("hot-reload", () => {
         testGatewayConfigData.pipelines.adminAPI.policies.shift();
         fs.writeFileSync(
           testGatewayConfigPath,
-          yaml.dump(testGatewayConfigData)
+          yaml.dump(testGatewayConfigData),
         );
       });
     });
@@ -200,7 +200,7 @@ describe.skip("hot-reload", () => {
         });
         fs.writeFileSync(
           testGatewayConfigPath,
-          yaml.dump(testGatewayConfigData)
+          yaml.dump(testGatewayConfigData),
         );
       });
     });

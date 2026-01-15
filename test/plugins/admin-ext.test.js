@@ -15,7 +15,7 @@ describe("admin with plugins", () => {
         adminRoutes: [
           function (adminExpressInstance) {
             adminExpressInstance.all("/test", (req, res) =>
-              res.json({ enabled: true })
+              res.json({ enabled: true }),
             );
           },
         ],
