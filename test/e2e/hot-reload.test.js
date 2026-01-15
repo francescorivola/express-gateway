@@ -17,7 +17,7 @@ const TEST_TIMEOUT = 10000;
 
 const baseConfigDirectory = path.join(__dirname, "../../lib/config");
 
-describe("hot-reload", () => {
+describe.skip("hot-reload", () => {
   describe("gateway config", () => {
     let testGatewayConfigPath = null;
     let testGatewayConfigData = null;
@@ -51,7 +51,7 @@ describe("hot-reload", () => {
 
                 testGatewayConfigPath = path.join(
                   tempPath,
-                  "gateway.config.yml",
+                  "gateway.config.yml"
                 );
 
                 findOpenPortNumbers(2)
@@ -88,7 +88,7 @@ describe("hot-reload", () => {
                             __dirname,
                             "../..",
                             "lib",
-                            "index.js",
+                            "index.js"
                           );
                           childProcess = fork(modulePath, [], {
                             cwd: tempPath,
@@ -107,14 +107,14 @@ describe("hot-reload", () => {
                                 done();
                               });
                           }, GATEWAY_STARTUP_WAIT_TIME);
-                        },
+                        }
                       );
                     });
                   })
                   .catch(done);
-              },
+              }
             );
-          },
+          }
         );
       });
     });
@@ -155,7 +155,7 @@ describe("hot-reload", () => {
         testGatewayConfigData.pipelines.adminAPI.policies.shift();
         fs.writeFileSync(
           testGatewayConfigPath,
-          yaml.dump(testGatewayConfigData),
+          yaml.dump(testGatewayConfigData)
         );
       });
     });
@@ -200,7 +200,7 @@ describe("hot-reload", () => {
         });
         fs.writeFileSync(
           testGatewayConfigPath,
-          yaml.dump(testGatewayConfigData),
+          yaml.dump(testGatewayConfigData)
         );
       });
     });

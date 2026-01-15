@@ -1,9 +1,9 @@
 const should = require("should");
-
 const { conditions, init } = require("../../lib/conditions");
 const gateway = require("../../lib/gateway");
 const Config = require("../../lib/config/config");
 const express = require("express");
+const { promisify } = require("util");
 
 const config = new Config();
 config.gatewayConfig = {
@@ -76,16 +76,16 @@ describe("gateway condition with plugins", () => {
     should(conditions["test-condition"]({ param1: "/test" })(req)).be.ok();
   });
 
-  after("close gateway srv", () => {
-    gatewaySrv.close();
+  after("close gateway srv", async () => {
+    await promisify(gatewaySrv.close.bind(gatewaySrv))();
   });
 });
 
 describe("gateway condition schema with plugins", () => {
   let gatewaySrv;
 
-  afterEach("close gateway srv", () => {
-    gatewaySrv.close();
+  afterEach("close gateway srv", async () => {
+    await promisify(gatewaySrv.close.bind(gatewaySrv))();
   });
 
   it("should call condition", () => {
@@ -145,7 +145,7 @@ describe("gateway condition schema with plugins", () => {
       const req = Object.create(express.request);
       req.url = "/test";
       should.throws(() =>
-        conditions["test-condition-2"]({ param1: true })(req),
+        conditions["test-condition-2"]({ param1: true })(req)
       );
     });
   });

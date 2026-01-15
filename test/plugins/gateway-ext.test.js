@@ -3,6 +3,7 @@ const gateway = require("../../lib/gateway");
 const eventBus = require("../../lib/eventBus");
 const Config = require("../../lib/config/config");
 const request = require("supertest");
+const { promisify } = require("util");
 
 const config = new Config();
 config.loadGatewayConfig();
@@ -18,7 +19,7 @@ describe("gateway routing with plugins", () => {
         gatewayRoutes: [
           function (gatewayExpressInstance) {
             gatewayExpressInstance.all("/test", (req, res) =>
-              res.json({ enabled: true }),
+              res.json({ enabled: true })
             );
           },
         ],
@@ -42,7 +43,7 @@ describe("gateway routing with plugins", () => {
     assert.strictEqual(httpSrvFromEvent, gatewaySrv);
   });
 
-  after("close gateway srv", () => {
-    gatewaySrv.close();
+  after("close gateway srv", async () => {
+    await promisify(gatewaySrv.close.bind(gatewaySrv))();
   });
 });

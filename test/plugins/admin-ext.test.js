@@ -2,6 +2,8 @@ const assert = require("assert");
 const admin = require("../../lib/rest");
 const eventBus = require("../../lib/eventBus");
 const request = require("supertest");
+const { promisify } = require("util");
+
 describe("admin with plugins", () => {
   let adminSrv, adminSrvFromEvent;
   before("fires up a new admin instance", function () {
@@ -13,7 +15,7 @@ describe("admin with plugins", () => {
         adminRoutes: [
           function (adminExpressInstance) {
             adminExpressInstance.all("/test", (req, res) =>
-              res.json({ enabled: true }),
+              res.json({ enabled: true })
             );
           },
         ],
@@ -21,7 +23,6 @@ describe("admin with plugins", () => {
       config: {
         gatewayConfig: {
           admin: {
-            host: "0.0.0.0",
             port: 0,
           },
         },
@@ -44,7 +45,7 @@ describe("admin with plugins", () => {
     assert.strictEqual(adminSrvFromEvent, adminSrv);
   });
 
-  after("close admin srv", () => {
-    adminSrv.close();
+  after("close admin srv", async () => {
+    await promisify(adminSrv.close.bind(adminSrv))();
   });
 });

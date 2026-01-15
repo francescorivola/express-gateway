@@ -7,6 +7,7 @@ const yaml = require("js-yaml");
 const gateway = require("../../lib/gateway");
 const adminHelper = require("../common/admin-helper")();
 const Config = require("../../lib/config/config");
+const { promisify } = require("util");
 
 describe("REST: schemas", () => {
   let config;
@@ -27,8 +28,8 @@ describe("REST: schemas", () => {
     });
   });
 
-  after("close gateway srv", () => {
-    gatewaySrv.close();
+  after("close gateway srv", async () => {
+    await promisify(gatewaySrv.close.bind(gatewaySrv))();
   });
 
   describe("when policies defined", () => {
@@ -46,10 +47,10 @@ describe("REST: schemas", () => {
         .list("policy")
         .then((schemasResult) => {
           const found = schemasResult.find((schemaResult) =>
-            schemaResult.schema.$id.includes("basic-auth"),
+            schemaResult.schema.$id.includes("basic-auth")
           );
           const other = schemasResult.filter(
-            (schemaResult) => schemaResult.type !== "policy",
+            (schemaResult) => schemaResult.type !== "policy"
           );
           should(found.schema).not.be.undefined();
           should(found.schema.$id).containEql("basic-auth");
