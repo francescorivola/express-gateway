@@ -21,6 +21,7 @@ describe("admin with plugins", () => {
       config: {
         gatewayConfig: {
           admin: {
+            host: "0.0.0.0",
             port: 0,
           },
         },
